@@ -1,0 +1,41 @@
+{
+  "name": "amplitude-viewer",
+  "version": "0.0.0",
+  "description": "render amplitudes like an oscilloscope in the browser given arrays of data",
+  "main": "index.js",
+  "dependencies": {
+    "brfs": "~1.0.0",
+    "domify": "~0.2.0",
+    "inherits": "~2.0.1",
+    "slideways": "~0.0.2"
+  },
+  "devDependencies": {
+    "tape": "~2.3.2"
+  },
+  "browserify": {
+    "transform": [ "brfs" ]
+  },
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/substack/amplitude-viewer.git"
+  },
+  "homepage": "https://github.com/substack/amplitude-viewer",
+  "keywords": [
+    "oscilloscope",
+    "scope",
+    "amplitude",
+    "browser",
+    "ui",
+    "wave",
+    "visualization"
+  ],
+  "author": {
+    "name": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net"
+  },
+  "license": "MIT"
+}
