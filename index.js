@@ -9,17 +9,10 @@ var slideways = require('slideways');
 module.exports = Scope;
 inherits(Scope, EventEmitter);
 
-function Scope (opts, fn) {
+function Scope (opts) {
     var self = this;
-    if (!(this instanceof Scope)) return new Scope(opts, fn);
-    
-    if (typeof opts === 'function') {
-        fn = opts;
-        opts = {};
-    }
+    if (!(this instanceof Scope)) return new Scope(opts);
     if (!opts) opts = {};
-    
-    this.fn = fn;
     
     this.element = domify(html)[0];
     this.element.style.width = '100%';
@@ -74,17 +67,14 @@ Scope.prototype.appendTo = function (target) {
 
 Scope.prototype.setDuration = function (d) {
     this.duration = d;
-    this.draw();
 };
 
 Scope.prototype.setTime = function (t) {
     this.time = t;
-    this.draw();
 };
 
 Scope.prototype.setOffset = function (x) {
     this.offset = x * this.duration;
-    this.draw();
 };
 
 Scope.prototype.resize = function () {
@@ -92,11 +82,9 @@ Scope.prototype.resize = function () {
     var style = window.getComputedStyle(this.svg);
     this.width = parseInt(style.width);
     this.height = parseInt(style.height);
-    this.draw();
 };
 
-Scope.prototype.draw = function () {
-    var fn = this.fn;
+Scope.prototype.draw = function (fn) {
     var samples = 500;
     
     var points = [];
