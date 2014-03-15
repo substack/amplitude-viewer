@@ -9,10 +9,17 @@ var slideways = require('slideways');
 module.exports = Scope;
 inherits(Scope, EventEmitter);
 
-function Scope (opts) {
+function Scope (opts, fn) {
     var self = this;
-    if (!(this instanceof Scope)) return new Scope(opts);
+    if (!(this instanceof Scope)) return new Scope(opts, fn);
+    
+    if (typeof opts === 'function') {
+        fn = opts;
+        opts = {};
+    }
     if (!opts) opts = {};
+    
+    this.fn = fn;
     
     this.element = domify(html)[0];
     this.element.style.width = '100%';
@@ -67,21 +74,17 @@ Scope.prototype.appendTo = function (target) {
 
 Scope.prototype.setDuration = function (d) {
     this.duration = d;
-    this._rewave();
+    this.draw();
 };
 
 Scope.prototype.setTime = function (t) {
     this.time = t;
-    this._rewave();
+    this.draw();
 };
 
 Scope.prototype.setOffset = function (x) {
     this.offset = x * this.duration;
-    this._rewave();
-};
-
-Scope.prototype._rewave = function () {
-    if (this._lastWave) this.wave(this._lastWave[0], this._lastWave[1]);
+    this.draw();
 };
 
 Scope.prototype.resize = function () {
@@ -89,17 +92,17 @@ Scope.prototype.resize = function () {
     var style = window.getComputedStyle(this.svg);
     this.width = parseInt(style.width);
     this.height = parseInt(style.height);
-    this._rewave();
+    this.draw();
 };
 
-Scope.prototype.wave = function (f, samples) {
-    this._lastWave = [ f, samples ];
+Scope.prototype.draw = function () {
+    var fn = this.fn;
+    var samples = 500;
     
-    if (samples === undefined) samples = 500;
     var points = [];
     for (var i = 0; i < samples; i++) {
         var t = this.offset + this.time + i / samples * this.duration;
-        var res = Math.max(-1, Math.min(1, f(t)));
+        var res = Math.max(-1, Math.min(1, fn(t)));
         if (isNaN(res)) res = 0;
         var x = this.width * (i / samples);
         var y = (res + 1) / 2 * (this.height - 25 * 2) + 10;
