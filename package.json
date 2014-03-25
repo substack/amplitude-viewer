@@ -1,6 +1,6 @@
 {
   "name": "amplitude-viewer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "render amplitudes like an oscilloscope in the browser given arrays of data",
   "main": "index.js",
   "dependencies": {
