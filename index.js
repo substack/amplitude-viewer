@@ -67,6 +67,7 @@ Scope.prototype.appendTo = function (target) {
 
 Scope.prototype.setDuration = function (d) {
     this.duration = d;
+    if (this._lastFn) this.draw(this._lastFn);
 };
 
 Scope.prototype.setTime = function (t) {
@@ -75,6 +76,7 @@ Scope.prototype.setTime = function (t) {
 
 Scope.prototype.setOffset = function (x) {
     this.offset = x * this.duration;
+    if (this._lastFn) this.draw(this._lastFn);
 };
 
 Scope.prototype.resize = function () {
@@ -86,6 +88,7 @@ Scope.prototype.resize = function () {
 
 Scope.prototype.draw = function (fn) {
     var samples = 500;
+    this._lastFn = fn;
     
     var points = [];
     for (var i = 0; i < samples; i++) {
