@@ -18,13 +18,6 @@ function Scope (opts) {
     this.element.style.width = '100%';
     this.element.style.height = '100%';
     
-    this.element.addEventListener('click', function (ev) {
-        if (ev.target === self.svg || ev.target === sliders
-        || ev.target === self.polyline) {
-            self.emit('click', ev);
-        }
-    });
-    
     this.svg = createElement('svg');
     this.svg.setAttribute('width', '100%');
     this.svg.setAttribute('height', '100%');
@@ -35,6 +28,19 @@ function Scope (opts) {
     p.setAttribute('stroke-width', opts.strokeWidth || '4px');
     p.setAttribute('fill', 'transparent');
     this.svg.appendChild(this.polyline);
+    
+    var shield = this.element.querySelector('.shield');
+    shield.style.position = 'absolute';
+    shield.style.top = '0px';
+    shield.style.bottom = '0px';
+    shield.style.left = '0px';
+    shield.style.right = '0px';
+    shield.style.zIndex = 5;
+    shield.style.backgroundColor = 'transparent';
+    
+    shield.addEventListener('click', function (ev) {
+        self.emit('click', ev);
+    });
     
     this.duration = opts.duration || 1 / 50;
     this.time = 0;
@@ -106,9 +112,10 @@ Scope.prototype.createSlider = function (opts, f) {
     if (!opts) opts = {};
     var a = slideways(opts);
     if (f) a.on('value', f);
-    a.appendTo(this.element.querySelector('#sliders'));
+    a.appendTo(this.element.querySelector('.sliders'));
+    a.element.style.zIndex = 10;
     return a;
-}
+};
 
 function createElement (name) {
     return document.createElementNS('http://www.w3.org/2000/svg', name);
