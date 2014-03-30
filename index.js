@@ -21,11 +21,13 @@ function Scope (opts) {
     this.svg = createElement('svg');
     this.svg.setAttribute('width', '100%');
     this.svg.setAttribute('height', '100%');
+    this.svg.setAttribute('viewBox', '0 -1.1 1 2.4');
+    this.svg.setAttribute('preserveAspectRatio', 'none');
     this.element.appendChild(this.svg);
     
     var p = this.polyline = createElement('polyline');
     p.setAttribute('stroke', opts.stroke || 'cyan');
-    p.setAttribute('stroke-width', opts.strokeWidth || '4px');
+    p.setAttribute('stroke-width', opts.strokeWidth || '.005');
     p.setAttribute('fill', 'transparent');
     this.svg.appendChild(this.polyline);
     
@@ -68,7 +70,6 @@ Scope.prototype.appendTo = function (target) {
     if (typeof target === 'string') target = document.querySelector(target);
     target.appendChild(this.element);
     this._target = target;
-    this.resize();
 };
 
 Scope.prototype.setDuration = function (d) {
@@ -85,13 +86,6 @@ Scope.prototype.setOffset = function (x) {
     if (this._lastFn) this.draw(this._lastFn);
 };
 
-Scope.prototype.resize = function () {
-    if (!this._target) return;
-    var style = window.getComputedStyle(this.svg);
-    this.width = parseInt(style.width);
-    this.height = parseInt(style.height);
-};
-
 Scope.prototype.draw = function (fn) {
     var samples = 500;
     this._lastFn = fn;
@@ -101,9 +95,7 @@ Scope.prototype.draw = function (fn) {
         var t = this.offset + this.time + i / samples * this.duration;
         var res = Math.max(-1, Math.min(1, fn(t)));
         if (isNaN(res)) res = 0;
-        var x = this.width * (i / samples);
-        var y = (res + 1) / 2 * (this.height - 25 * 2) + 10;
-        points.push(x + ',' + y);
+        points.push((i / samples) + ',' + res);
     }
     this.polyline.setAttribute('points', points.join(' '));
 };
